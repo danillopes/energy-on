@@ -1,0 +1,272 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Energy On — tokens de design (identidade da loja)
+   Grafite da arte oficial, branco e o rosa-vermelho do “E” e do “on”.
+   ------------------------------------------------------------------ */
+@theme {
+  --color-ink: #141414;          /* grafite profundo da marca — base */
+  --color-graphite: #1e1e1e;     /* superfícies elevadas */
+  --color-smoke: #303030;        /* divisórias e bordas */
+  --color-mist: #a8a8a8;         /* texto secundário (contraste 7.6:1 sobre a base) */
+  --color-silver: #d9d9d9;       /* texto de apoio claro */
+  --color-paper: #ffffff;        /* branco */
+  --color-brand: #fc1e50;        /* rosa-vermelho Energy On */
+  --color-brand-deep: #d90f3f;   /* hover / pressionado */
+
+  --font-sans: var(--font-archivo), "Helvetica Neue", Arial, system-ui, sans-serif;
+  --font-script: var(--font-playfair), Georgia, "Times New Roman", serif;
+
+  /* Escala tipográfica clássica (Bringhurst) com teto fluido nos títulos */
+  --text-micro: 0.75rem;
+  --text-small: 0.875rem;
+  --text-body: 1.0625rem;
+  --text-lead: clamp(1.125rem, 0.9rem + 0.6vw, 1.3125rem);
+  --text-h3: clamp(1.3125rem, 1.1rem + 0.6vw, 1.5rem);
+  --text-h2: clamp(2rem, 1.2rem + 2.6vw, 3.75rem);
+  --text-display: clamp(3.25rem, 0.6rem + 11.2vw, 13rem);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --breakpoint-3xl: 112rem; /* 1792px — monitores ultrawide */
+}
+
+:root {
+  --header-h: 3.75rem;
+  --gutter: clamp(1rem, 0.4rem + 3vw, 4rem);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  color-scheme: dark;
+}
+
+@media (min-width: 64rem) {
+  :root { --header-h: 4.25rem; }
+}
+
+html {
+  background: var(--color-ink);
+  color: var(--color-paper);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--header-h) + var(--safe-top));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+body {
+  background: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: 1.6;
+  font-stretch: 100%;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection { background: var(--color-brand); color: var(--color-paper); }
+
+:focus-visible {
+  outline: 2px solid var(--color-paper);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+img { -webkit-user-drag: none; }
+
+/* ------------------------------------------------------------------
+   Tipografia
+   ------------------------------------------------------------------ */
+@layer components {
+  .type-display {
+    font-size: var(--text-display);
+    font-stretch: 125%;
+    font-weight: 200;
+    line-height: 0.86;
+    letter-spacing: -0.02em;
+  }
+  .type-h2 {
+    font-size: var(--text-h2);
+    font-stretch: 112%;
+    font-weight: 300;
+    line-height: 1.04;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+  .type-h3 {
+    font-size: var(--text-h3);
+    font-stretch: 108%;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.005em;
+  }
+  .type-lead {
+    font-size: var(--text-lead);
+    line-height: 1.55;
+    color: var(--color-silver);
+    text-wrap: pretty;
+  }
+  .type-meta {
+    font-size: var(--text-small);
+    color: var(--color-mist);
+    line-height: 1.5;
+  }
+
+  .container-x {
+    width: 100%;
+    max-width: 105rem;
+    margin-inline: auto;
+    padding-left: max(var(--gutter), var(--safe-left));
+    padding-right: max(var(--gutter), var(--safe-right));
+  }
+
+  .section-y {
+    padding-block: clamp(5rem, 3rem + 7vw, 10rem);
+  }
+
+  /* Botões: um sólido (ação principal) e um de contorno. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    min-height: 3rem;
+    padding: 0 1.5rem;
+    font-size: var(--text-small);
+    font-weight: 500;
+    font-stretch: 108%;
+    letter-spacing: 0.01em;
+    border-radius: 999px;
+    border: 1px solid var(--color-paper);
+    transition: background-color 0.35s var(--ease-out-soft), color 0.35s var(--ease-out-soft),
+      border-color 0.35s var(--ease-out-soft), transform 0.2s var(--ease-out-soft);
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    white-space: nowrap;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-solid { background: var(--color-brand); color: var(--color-paper); border-color: var(--color-brand); }
+  .btn-light { background: var(--color-paper); color: var(--color-ink); }
+  .btn-ghost { background: transparent; color: var(--color-paper); border-color: rgb(255 255 255 / 0.4); }
+  .btn-sm { min-height: 2.5rem; padding: 0 1.125rem; }
+
+  @media (hover: hover) {
+    .btn-solid:hover { background: var(--color-brand-deep); border-color: var(--color-brand-deep); }
+    .btn-light:hover { background: transparent; color: var(--color-paper); }
+    .btn-ghost:hover { background: var(--color-paper); color: var(--color-ink); border-color: var(--color-paper); }
+  }
+
+  /* Link com sublinhado que “acende” da esquerda para a direita */
+  .link-line {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.45s var(--ease-out-soft), color 0.3s;
+  }
+  @media (hover: hover) {
+    .link-line:hover { background-size: 100% 1px; }
+  }
+
+  /* Chips de filtro */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-smoke);
+    font-size: var(--text-small);
+    color: var(--color-silver);
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    touch-action: manipulation;
+    white-space: nowrap;
+  }
+  .chip[aria-pressed="true"],
+  .chip[aria-selected="true"] {
+    background: var(--color-brand);
+    color: var(--color-paper);
+    border-color: var(--color-brand);
+  }
+  @media (hover: hover) {
+    .chip:not([aria-pressed="true"]):not([aria-selected="true"]):hover {
+      border-color: var(--color-mist);
+      color: var(--color-paper);
+    }
+  }
+
+  .scroll-row {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+  }
+  .scroll-row::-webkit-scrollbar { display: none; }
+  .scroll-row > * { scroll-snap-align: start; flex: none; }
+}
+
+/* ------------------------------------------------------------------
+   Movimento
+   Uma sequência orquestrada no hero; no resto, fotos “acendem” ao entrar.
+   ------------------------------------------------------------------ */
+@keyframes rise {
+  from { opacity: 0; transform: translate3d(0, 1.25rem, 0); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes letter-in {
+  from { opacity: 0; transform: translate3d(0, 0.35em, 0); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+@keyframes cue {
+  0% { transform: scaleY(0); transform-origin: top; }
+  45% { transform: scaleY(1); transform-origin: top; }
+  55% { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+.hero-letter {
+  display: inline-block;
+  opacity: 0;
+  animation: letter-in 1.1s var(--ease-out-soft) forwards;
+  animation-delay: calc(0.25s + var(--i) * 0.055s);
+}
+.hero-rise {
+  opacity: 0;
+  animation: rise 1s var(--ease-out-soft) forwards;
+  animation-delay: var(--d, 0.9s);
+}
+.hero-photo { animation: fade 1.6s var(--ease-out-soft) both; }
+.cue-line { animation: cue 2.4s var(--ease-in-out-soft) infinite 2s; }
+
+/* Fotos que acendem: escurecidas → reveladas, sem deslocar o layout */
+.light-up { position: relative; overflow: hidden; }
+.light-up > .light-up__media {
+  transform: scale(1.06);
+  filter: brightness(0.25);
+  transition: transform 1.6s var(--ease-out-soft), filter 1.4s var(--ease-out-soft);
+}
+.light-up[data-inview="true"] > .light-up__media { transform: scale(1); filter: brightness(1); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .hero-letter, .hero-rise { opacity: 1; }
+  .light-up > .light-up__media { transform: none; filter: none; }
+}
