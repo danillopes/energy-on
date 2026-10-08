@@ -140,7 +140,7 @@ export function StoreTour() {
             <button
               type="button"
               onClick={stop}
-              className="absolute top-3 left-3 z-10 inline-flex min-h-10 items-center gap-2 rounded-full bg-ink/80 px-3.5 text-small text-paper backdrop-blur transition-colors hover:bg-ink"
+              className="absolute bottom-10 left-1/2 z-10 inline-flex min-h-10 -translate-x-1/2 items-center gap-2 rounded-full bg-ink/80 px-3.5 text-small text-paper backdrop-blur transition-colors hover:bg-ink"
             >
               <CloseIcon size={16} />
               Encerrar visita

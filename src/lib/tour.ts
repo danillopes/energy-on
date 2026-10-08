@@ -27,5 +27,5 @@ export function tourEmbedUrl(): string {
   }
 
   // !6m8!1m7!1s<pano>!2m2!1d<lat>!2d<lng>!3f<heading>!4f<pitch>!5f<zoom>
-  return `https://www.google.com/maps/embed?pb=!4v1728400000000!6m8!1m7!1s${panoId}!2m2!1d${lat}!2d${lng}!3f${heading}!4f${pitch}!5f0.78&hl=pt-BR`;
+  return `https://www.google.com/maps/embed?pb=!4v1728400000000!6m8!1m7!1s${panoId}!2m2!1d${lat}!2d${lng}!3f${heading}!4f${pitch}!5f0.6&hl=pt-BR`;
 }

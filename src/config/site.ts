@@ -82,9 +82,10 @@ export const site = {
    */
   tour: {
     panoId: "CIHM0ogKEICAgIC2ubSXMg",
-    lat: -29.3272505,
-    lng: -49.7266739,
-    heading: 90,
+    lat: -29.3270693,
+    lng: -49.7267683,
+    /** 0 = começa olhando para a fachada da loja. */
+    heading: 0,
     pitch: 0,
     /** Abre o mesmo panorama no app/site do Google Maps (tela cheia nativa no iPhone). */
     mapsUrl:
