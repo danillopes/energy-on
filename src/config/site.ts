@@ -54,7 +54,7 @@ export const site = {
    * e a seção mostra apenas a prévia demonstrativa.
    */
   instagram: {
-    handle: "" as string, // ex.: "energyon.iluminacao"
+    handle: "rmenergyon" as string,
     get url() {
       return this.handle ? `https://www.instagram.com/${this.handle}/` : "";
     },
