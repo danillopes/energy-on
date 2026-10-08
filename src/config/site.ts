@@ -75,7 +75,8 @@ export const site = {
   },
 
   /**
-   * Passeio virtual 360° da loja (fotoesfera publicada no Google Maps pela Insight View).
+   * Passeio virtual 360° da loja — DESATIVADO (seção retirada da página a pedido da loja).
+   * Para reativar, volte a incluir <StoreTour /> em src/app/page.tsx. (fotoesfera publicada no Google Maps pela Insight View).
    * - panoId: ID oficial do panorama, copiado da URL do Google Maps (trecho "!1s…").
    * - O embed usa o código de incorporação padrão do Google Maps, sem chave de API.
    * - Opcional: defina NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY para usar a Maps Embed API (ver README).

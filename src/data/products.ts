@@ -31,6 +31,10 @@ export type ProductSpecs = {
 export type Product = {
   slug: string;
   name: string;
+  /** Marca/fabricante (ex.: "Nordecor"). Aparece no card e na mensagem do WhatsApp. */
+  brand?: string;
+  /** Código de referência do catálogo do fabricante. */
+  ref?: string;
   category: CategoryId;
   rooms: RoomId[];
   style: StyleId;

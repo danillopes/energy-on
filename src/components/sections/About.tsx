@@ -26,7 +26,7 @@ export function About() {
               Na Energy On, acreditamos que a iluminação vai além da funcionalidade. Cada detalhe tem o poder de
               valorizar espaços, criar atmosferas e transformar experiências.
             </p>
-            <a href="#loja" className="btn btn-ghost mt-10">
+            <a href="#contato" className="btn btn-ghost mt-10">
               Conheça a Energy On
             </a>
           </div>

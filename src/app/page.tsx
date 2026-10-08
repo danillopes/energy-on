@@ -10,7 +10,6 @@ import { Header } from "@/components/sections/Header";
 import { Hero } from "@/components/sections/Hero";
 import { Instagram } from "@/components/sections/Instagram";
 import { Simulator } from "@/components/sections/Simulator";
-import { StoreTour } from "@/components/sections/StoreTour";
 
 // Revalida a página a cada hora (feed do Instagram, quando ativado).
 export const revalidate = 3600;
@@ -48,7 +47,6 @@ export default function Home() {
         <Catalog products={getProducts()} />
         <Instagram />
         <About />
-        <StoreTour />
       </main>
       <Footer />
       <script

@@ -12,27 +12,27 @@ export const WHATSAPP_GENERAL_MESSAGE =
 export const WHATSAPP_QUOTE_MESSAGE =
   "Olá! Vim pelo site da Energy On e gostaria de solicitar um orçamento.";
 
-/** URL pública e leve da foto (as do Unsplash recebem largura fixa). */
-function photoUrl(src: string): string {
-  if (src.startsWith("/")) return `${site.url}${src}`;
-  if (src.startsWith("https://images.unsplash.com/")) return `${src}?w=1080&auto=format`;
-  return src;
-}
-
-type ProductRef = { name: string; slug: string; image?: string };
+type ProductRef = { name: string; slug: string; brand?: string; ref?: string };
 
 /**
- * Mensagem de orçamento de um produto. Inclui o link da página do produto
- * e, quando houver, a URL pública da foto — o atendente abre o link e
- * identifica o item. (O WhatsApp não anexa a imagem automaticamente.)
+ * Mensagem de orçamento de um produto, já pronta no WhatsApp do cliente.
+ * Marca e código entram quando o produto tiver esses dados; o link leva o
+ * atendente direto à página da peça (com foto), sem anexos.
+ *
+ * Exemplo:
+ *   Olá! Gostaria de fazer um orçamento do produto:
+ *
+ *   *Pendente Cúpula*
+ *   Marca: Nordecor
+ *   Código: PD-1234
+ *
+ *   Vi no site: https://energy-on.vercel.app/produtos/pendente-cupula
  */
 export function productQuoteMessage(product: ProductRef): string {
-  const link = `${site.url}/produtos/${product.slug}`;
-  const lines = [
-    `Olá! Tenho interesse no produto ${product.name} da Energy On. Gostaria de saber mais informações e solicitar um orçamento.`,
-    `Referência: ${link}`,
-  ];
-  if (product.image) lines.push(`Foto: ${photoUrl(product.image)}`);
+  const lines = ["Olá! Gostaria de fazer um orçamento do produto:", "", `*${product.name}*`];
+  if (product.brand) lines.push(`Marca: ${product.brand}`);
+  if (product.ref) lines.push(`Código: ${product.ref}`);
+  lines.push("", `Vi no site: ${site.url}/produtos/${product.slug}`);
   return lines.join("\n");
 }
 
