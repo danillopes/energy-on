@@ -29,23 +29,23 @@ export function BeforeAfter() {
             afterLabel="Depois (Luz em Camadas 2700K)"
             before={
               <Image
-                src="/media/antes-sala-real.jpg"
+                src="/media/antes-sala-real.webp"
                 alt="Ambiente real antes: sala de estar iluminada apenas por uma luminária central fria no teto, sem profundidade"
                 fill
-                priority
+                loading="lazy"
                 sizes="(min-width: 1536px) 1400px, 100vw"
-                quality={85}
+                quality={75}
                 className="object-cover object-center"
               />
             }
             after={
               <Image
-                src="/media/depois-sala-real.jpg"
+                src="/media/depois-sala-real.webp"
                 alt="Ambiente real depois: a mesma sala com projeto luminotécnico completo da Energy On, com sanca quente, lustre escultural e spots"
                 fill
-                priority
+                loading="lazy"
                 sizes="(min-width: 1536px) 1400px, 100vw"
-                quality={85}
+                quality={75}
                 className="object-cover object-center"
               />
             }

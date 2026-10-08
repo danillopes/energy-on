@@ -1,11 +1,13 @@
 "use client";
 
-import { useCallback, useRef, type KeyboardEvent } from "react";
+import { useCallback, useEffect, useRef, type KeyboardEvent } from "react";
 import { environments, type Environment } from "@/data/environments";
 import { getProductsByRoom } from "@/data/products";
 import { categories, labelOf, type RoomId } from "@/data/taxonomy";
 import { useSessionState } from "@/hooks/useSessionState";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { cn } from "@/lib/cn";
+import { ArrowIcon } from "../shared/Icons";
 import { KeepAlive } from "../shared/KeepAlive";
 import { LightUp } from "../shared/LightUp";
 import { SmartImage } from "../shared/SmartImage";
@@ -46,12 +48,15 @@ export function Environments() {
           </p>
         </div>
 
-        {/* Abas em formato de card — rolagem lateral no celular, grade no desktop */}
+        {/* Celular e tablet: carrossel com um ambiente por vez */}
+        <EnvironmentCarousel active={active} onChange={setActive} />
+
+        {/* Desktop: abas em formato de card */}
         <div
           role="tablist"
           aria-label="Ambientes"
           onKeyDown={onKeyDown}
-          className="scroll-row -mx-[var(--gutter)] mt-12 px-[var(--gutter)] pb-2 lg:mx-0 lg:grid lg:grid-cols-5 lg:gap-4 lg:overflow-visible lg:px-0"
+          className="mt-12 hidden lg:grid lg:grid-cols-5 lg:gap-4"
         >
           {environments.map((env, index) => {
             const selected = env.id === active;
@@ -68,15 +73,15 @@ export function Environments() {
                 aria-controls={`painel-${env.id}`}
                 tabIndex={selected ? 0 : -1}
                 onClick={() => setActive(env.id)}
-                className="group flex w-[68vw] max-w-72 flex-col justify-start text-left sm:w-64 lg:w-auto lg:max-w-none"
+                className="group flex flex-col justify-start text-left"
               >
                 <span className="relative block aspect-[4/5] overflow-hidden rounded-sm bg-graphite">
                   <SmartImage
                     src={env.photo.src}
                     alt=""
                     fill
-                    sizes="(min-width: 1024px) 20vw, 68vw"
-                    quality={60}
+                    sizes="20vw"
+                    quality={80}
                     fallbackLabel={env.name}
                     className={cn(
                       "object-cover object-center transition-[transform,filter] duration-700 ease-[var(--ease-out-soft)]",
@@ -98,7 +103,7 @@ export function Environments() {
           })}
         </div>
 
-        <div className="mt-14 lg:mt-20">
+        <div className="mt-10 lg:mt-20">
           <KeepAlive
             activeKey={active}
             keys={roomIds}
@@ -108,6 +113,147 @@ export function Environments() {
         </div>
       </div>
     </section>
+  );
+}
+
+/**
+ * Carrossel do celular/tablet: cada slide ocupa a largura inteira do conteúdo,
+ * centralizado, sem mostrar parte do próximo. Arrastar para o lado troca o
+ * ambiente ativo e o painel de ideias logo abaixo acompanha.
+ */
+function EnvironmentCarousel({ active, onChange }: { active: RoomId; onChange: (id: RoomId) => void }) {
+  const scroller = useRef<HTMLDivElement>(null);
+  const slides = useRef<Array<HTMLLIElement | null>>([]);
+  const reduced = useReducedMotion();
+  const activeIndex = Math.max(0, roomIds.indexOf(active));
+  const firstSync = useRef(true);
+
+  // Slide que está centralizado na tela vira o ambiente ativo.
+  useEffect(() => {
+    const root = scroller.current;
+    if (!root) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const id = (entry.target as HTMLElement).dataset.room as RoomId;
+            if (id) onChange(id);
+          }
+        }
+      },
+      { root, threshold: 0.6 },
+    );
+    slides.current.forEach((slide) => slide && observer.observe(slide));
+    return () => observer.disconnect();
+  }, [onChange]);
+
+  // Quando o ativo muda por fora (abertura da página, botões), leva o carrossel até ele.
+  useEffect(() => {
+    const root = scroller.current;
+    const slide = slides.current[activeIndex];
+    if (!root || !slide) return;
+    const target = slide.offsetLeft - root.offsetLeft;
+    if (Math.abs(root.scrollLeft - target) < 4) return;
+    root.scrollTo({ left: target, behavior: firstSync.current || reduced ? "auto" : "smooth" });
+    firstSync.current = false;
+  }, [activeIndex, reduced]);
+
+  const go = (index: number) => {
+    const next = (index + roomIds.length) % roomIds.length;
+    onChange(roomIds[next]);
+  };
+
+  return (
+    <div
+      className="mt-10 lg:hidden"
+      role="region"
+      aria-roledescription="carrossel"
+      aria-label="Ambientes"
+    >
+      <div
+        ref={scroller}
+        className="flex snap-x snap-mandatory gap-[var(--gutter)] overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        <ul className="contents">
+          {environments.map((env, index) => (
+            <li
+              key={env.id}
+              ref={(node) => {
+                slides.current[index] = node;
+              }}
+              data-room={env.id}
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`${index + 1} de ${environments.length}: ${env.name}`}
+              className="w-full shrink-0 snap-center snap-always"
+            >
+              <div className="relative mx-auto aspect-[4/5] w-full max-w-xl overflow-hidden rounded-sm bg-graphite sm:aspect-[4/3]">
+                <SmartImage
+                  src={env.photo.src}
+                  alt={env.photo.alt}
+                  fill
+                  sizes="(min-width: 640px) 576px, 100vw"
+                  quality={80}
+                  loading={index === 0 ? "eager" : "lazy"}
+                  fallbackLabel={env.name}
+                  className="object-cover object-center"
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/90 via-ink/40 to-transparent p-5 pt-16">
+                  <p className="type-h3">{env.name}</p>
+                  <p className="mt-1 text-small text-silver">{env.short}</p>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Navegação: anterior, indicadores e próximo */}
+      <div className="mx-auto mt-5 flex max-w-xl items-center justify-between">
+        <button
+          type="button"
+          onClick={() => go(activeIndex - 1)}
+          aria-label="Ambiente anterior"
+          className="grid h-11 w-11 place-items-center rounded-full border border-smoke text-paper active:scale-95"
+        >
+          <span className="rotate-180">
+            <ArrowIcon size={18} />
+          </span>
+        </button>
+
+        <div className="flex items-center gap-2">
+          {environments.map((env, index) => (
+            <button
+              key={env.id}
+              type="button"
+              onClick={() => onChange(env.id)}
+              aria-label={`Ir para ${env.name}`}
+              aria-current={index === activeIndex ? "true" : undefined}
+              className="grid h-11 w-6 place-items-center"
+            >
+              <span
+                className={cn(
+                  "block h-1.5 rounded-full transition-all duration-500 ease-[var(--ease-out-soft)]",
+                  index === activeIndex ? "w-6 bg-brand" : "w-1.5 bg-smoke",
+                )}
+              />
+            </button>
+          ))}
+        </div>
+
+        <button
+          type="button"
+          onClick={() => go(activeIndex + 1)}
+          aria-label="Próximo ambiente"
+          className="grid h-11 w-11 place-items-center rounded-full border border-smoke text-paper active:scale-95"
+        >
+          <ArrowIcon size={18} />
+        </button>
+      </div>
+      <p className="sr-only" aria-live="polite">
+        {environments[activeIndex]?.name}
+      </p>
+    </div>
   );
 }
 
@@ -122,12 +268,14 @@ function EnvironmentPanel({ env }: { env: Environment }) {
       tabIndex={0}
       className="grid gap-10 focus-visible:outline-offset-8 lg:grid-cols-12 lg:gap-16"
     >
-      <LightUp className="aspect-[4/3] rounded-sm bg-graphite lg:col-span-7 lg:aspect-auto lg:min-h-[34rem]">
+      {/* No celular a foto já aparece no carrossel; aqui ela só entra no desktop */}
+      <LightUp className="hidden rounded-sm bg-graphite lg:col-span-7 lg:block lg:min-h-[34rem]">
         <SmartImage
           src={env.photo.src}
           alt={env.photo.alt}
           fill
-          sizes="(min-width: 1024px) 58vw, 100vw"
+          sizes="(min-width: 1024px) 60vw, 100vw"
+          quality={80}
           fallbackLabel={env.photo.alt}
           className="object-cover object-center"
         />

@@ -4,6 +4,20 @@
  * altere neste arquivo e o site inteiro acompanha.
  */
 
+function resolveSiteUrl(): string {
+  const envUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "") ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "") ||
+    "http://localhost:3000";
+
+  const normalized = envUrl.startsWith("http://") || envUrl.startsWith("https://")
+    ? envUrl
+    : `https://${envUrl}`;
+
+  return normalized.replace(/\/$/, "");
+}
+
 export const site = {
   name: "Energy On",
   legalName: "RM Materiais Elétricos",
@@ -11,8 +25,8 @@ export const site = {
   tagline: "A iluminação transforma espaços. Nós transformamos ambientes.",
   description:
     "Energy On — iluminação decorativa e soluções para ambientes: lustres, pendentes, arandelas, spots, trilhos, fitas LED e projetos para salas, quartos, cozinhas, banheiros e áreas externas.",
-  /** Defina NEXT_PUBLIC_SITE_URL no ambiente de produção (ex.: https://www.energyon.com.br). */
-  url: (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, ""),
+  /** URL pública do site com fallback automático para VERCEL_PROJECT_PRODUCTION_URL / VERCEL_URL. */
+  url: resolveSiteUrl(),
   locale: "pt_BR",
 
   /**
@@ -51,13 +65,33 @@ export const site = {
    * o rodapé mostra um aviso neutro em vez de inventar um endereço.
    */
   address: {
-    street: "" as string,
+    street: "Av. Beira Rio, 1370" as string,
     district: "" as string,
-    city: "" as string,
-    state: "" as string,
+    city: "Passo de Torres" as string,
+    state: "SC" as string,
     postalCode: "" as string,
-    mapsUrl: "" as string,
+    mapsUrl: "https://www.google.com/maps/search/?api=1&query=Av.+Beira+Rio%2C+1370%2C+Passo+de+Torres+-+SC" as string,
     hours: "" as string,
+  },
+
+  /**
+   * Passeio virtual 360° da loja (fotoesfera publicada no Google Maps pela Insight View).
+   * - panoId: ID oficial do panorama, copiado da URL do Google Maps (trecho "!1s…").
+   * - O embed usa o código de incorporação padrão do Google Maps, sem chave de API.
+   * - Opcional: defina NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY para usar a Maps Embed API (ver README).
+   */
+  tour: {
+    panoId: "CIHM0ogKEICAgIC2ubSXMg",
+    lat: -29.3272505,
+    lng: -49.7266739,
+    heading: 90,
+    pitch: 0,
+    /** Abre o mesmo panorama no app/site do Google Maps (tela cheia nativa no iPhone). */
+    mapsUrl:
+      "https://www.google.com/maps/@-29.3272505,-49.7266739,3a,75y,90t/data=!3m4!1e1!3m2!1sCIHM0ogKEICAgIC2ubSXMg!2e10",
+    /** Ficha da loja no Google Maps. */
+    placeUrl: "https://maps.google.com/?cid=3867986044701926540",
+    preview: { src: "/media/loja-fachada.webp", alt: "Fachada da Energy On Iluminação e Automação, na Av. Beira Rio, em Passo de Torres" },
   },
 
   nav: [

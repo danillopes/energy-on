@@ -115,3 +115,15 @@ src/
 - Endereço, horário e link do mapa.
 - Domínio (`NEXT_PUBLIC_SITE_URL`).
 - Revisão jurídica da Política de Privacidade (texto-base em `src/app/privacidade/page.tsx`).
+
+## Passeio virtual 360° ("Conheça a Energy On por dentro")
+
+Seção `src/components/sections/StoreTour.tsx`, configurada em `site.tour` (`src/config/site.ts`).
+
+- Usa o panorama oficial da loja no Google Maps (ID `CIHM0ogKEICAgIC2ubSXMg`, publicado pela Insight View).
+- Nada do Google é carregado até o visitante tocar em **Iniciar visita virtual** — antes disso aparece só a foto da fachada (`public/media/loja-fachada.webp`).
+- **Sem chave de API**: o site usa o código de incorporação padrão que o Google Maps gera em "Compartilhar → Incorporar um mapa".
+- **Opcional — Maps Embed API**: se um dia o embed padrão deixar de funcionar, crie uma chave no Google Cloud, ative só a "Maps Embed API",
+  restrinja a chave aos referenciadores HTTP do seu domínio (ex.: `https://energy-on.vercel.app/*`) e defina na Vercel
+  `NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY`. Essa chave é pública por natureza (vai no HTML) — por isso a restrição de domínio é obrigatória.
+- Para trocar o panorama: abra a foto 360° no Google Maps, copie o trecho `!1s…` da URL e atualize `panoId`, `lat`, `lng` e `mapsUrl`.

@@ -12,7 +12,7 @@ const references = [
     id: "jantar",
     title: "Mesa de Jantar",
     subtitle: "Ponto focal e proporção ideal",
-    image: "/media/lustre-aurea-jantar.jpg",
+    image: "/media/lustre-aurea-jantar.webp",
     alt: "Lustre Áurea com braços dourados em latão e globos âmbar sobre mesa de jantar em mármore nero marquina à noite",
     tag: "Sala de Jantar • 2700K",
     description:
@@ -23,7 +23,7 @@ const references = [
     id: "living",
     title: "Living & Pé-Direito Alto",
     subtitle: "Protagonista no espaço integrado",
-    image: "/media/lustre-aurea-living.jpg",
+    image: "/media/lustre-aurea-living.webp",
     alt: "Lustre Áurea como peça central em living sofisticado com painel ripado, sanca de LED e sofá claro",
     tag: "Living • Pé-Direito Duplo",
     description:
@@ -34,7 +34,7 @@ const references = [
     id: "macro",
     title: "Vidro Âmbar & Detalhes",
     subtitle: "Close-up em acabamento artesanal",
-    image: "/media/lustre-aurea-macro.jpg",
+    image: "/media/lustre-aurea-macro.webp",
     alt: "Macro detalhado do vidro âmbar soprado artesanalmente com relevo óptico e articulação usinada em latão",
     tag: "Detalhe Construtivo • Macro",
     description:
@@ -45,7 +45,7 @@ const references = [
     id: "baixo",
     title: "Perspectiva Inferior",
     subtitle: "Geometria radial e equilíbrio visual",
-    image: "/media/lustre-aurea-baixo.jpg",
+    image: "/media/lustre-aurea-baixo.webp",
     alt: "Vista zenital de baixo para cima do Lustre Áurea mostrando o desenho radial das hastes sob o teto ripado",
     tag: "Perspectiva Zenital • Vista de Baixo",
     description:
@@ -56,7 +56,7 @@ const references = [
     id: "dia",
     title: "Escultura à Luz Natural",
     subtitle: "Presença estética mesmo desligado",
-    image: "/media/lustre-aurea-dia.jpg",
+    image: "/media/lustre-aurea-dia.webp",
     alt: "Lustre Áurea desligado durante a manhã com luz natural entrando pelas grandes janelas panorâmicas",
     tag: "Luz Natural • Peça de Arte",
     description:
@@ -67,7 +67,7 @@ const references = [
     id: "intimista",
     title: "Atmosfera Noturna & Reflexos",
     subtitle: "Clima intimista para receber",
-    image: "/media/lustre-aurea-intimista.jpg",
+    image: "/media/lustre-aurea-intimista.webp",
     alt: "Reflexos da luz do Lustre Áurea em taças de cristal e mesa de mármore com efeito de bokeh dourado à noite",
     tag: "Atmosfera • Noite & Recepções",
     description:
@@ -79,7 +79,7 @@ const references = [
 const chandelierProduct = {
   slug: "lustre-aurea",
   name: "Lustre Áurea Contemporâneo",
-  image: "/media/lustre-aurea-jantar.jpg",
+  image: "/media/lustre-aurea-jantar.webp",
 };
 
 export function ChandelierRepertoire() {
@@ -131,9 +131,9 @@ export function ChandelierRepertoire() {
               src={current.image}
               alt={current.alt}
               fill
-              priority
+              loading="lazy"
               sizes="(min-width: 1024px) 66vw, 100vw"
-              quality={85}
+              quality={75}
               className="object-cover object-center transition-[transform,opacity] duration-700 ease-[var(--ease-out-soft)] hover:scale-[1.02]"
             />
 
