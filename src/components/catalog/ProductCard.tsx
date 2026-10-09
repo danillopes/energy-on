@@ -57,8 +57,8 @@ export const ProductCard = memo(function ProductCard({
         <p className="truncate text-[0.6875rem] tracking-[0.16em] text-mist uppercase sm:text-micro">
           {brand ?? labelOf(categories, product.category)}
         </p>
-        <h3 className="mt-1.5 text-[0.9375rem] leading-snug text-paper sm:type-h3">{resolved.name}</h3>
-        <CodeLine resolved={resolved} className="mt-2 text-micro sm:text-small" />
+        <h3 className="mt-1.5 text-[0.9375rem] leading-snug text-paper sm:text-[1.1875rem] sm:tracking-[-0.005em]">{resolved.name}</h3>
+        <CodeLine resolved={resolved} compact className="mt-2 text-micro sm:text-small" />
 
         <div className="mt-4 flex flex-col gap-2 sm:mt-auto sm:pt-5">
           <button type="button" onClick={() => onOpen(product)} className="btn btn-ghost btn-sm w-full px-3">

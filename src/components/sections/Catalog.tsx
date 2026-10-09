@@ -437,7 +437,7 @@ function SearchBox({ value, onChange }: { value: string; onChange: (value: strin
         spellCheck={false}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        placeholder="Buscar por nome ou código"
+        placeholder="Nome ou código"
         className="h-11 w-full rounded-full border border-smoke bg-graphite/70 pr-11 pl-11 text-[1rem] text-paper placeholder:text-mist focus:border-mist focus:outline-none [&::-webkit-search-cancel-button]:hidden"
       />
       {value && (
