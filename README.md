@@ -31,8 +31,8 @@ Recomendado: publicar na Vercel (zero configuração) ou em qualquer servidor No
 | --- | --- |
 | Telefone, WhatsApp, Instagram, endereço, menu, logo | `src/config/site.ts` |
 | Fotos (hero, ambientes, sobre, Instagram) | `src/config/images.ts` |
-| Produtos do catálogo | `src/data/products.ts` |
-| Categorias, ambientes, estilos e acabamentos | `src/data/taxonomy.ts` |
+| Produtos do catálogo | `src/data/catalog/` |
+| Categorias, ambientes e estilos | `src/data/taxonomy.ts` |
 | Textos dos ambientes | `src/data/environments.ts` |
 | Textos do simulador de temperatura | `src/data/temperatures.ts` |
 | Mensagens do WhatsApp | `src/lib/whatsapp.ts` |
@@ -52,10 +52,23 @@ Para usar as fotos da loja: exporte em AVIF ou WebP, salve em `public/media/` e 
 `src/config/images.ts` (ou em cada produto) por `"/media/nome-do-arquivo.avif"`. Atualize o texto `alt`.
 
 ### Catálogo
-Os 20 itens são **exemplos fictícios**, marcados com o selo “Exemplo”. Não há preços, marcas, estoque ou
-especificações. Para ligar a uma fonte real (planilha, CMS ou banco), reimplemente `getProducts()` e
-`getProduct()` em `src/data/products.ts` mantendo o tipo `Product` e mude `demo` para `false`.
-Cada produto ganha automaticamente sua página em `/produtos/<slug>` e entra no sitemap.
+Fica em `src/data/catalog/`:
+
+| Arquivo | O quê |
+| --- | --- |
+| `brands.ts` | Fabricantes e catálogos de origem (link “Ver catálogo original”) |
+| `products-gmh.ts` | 78 produtos GMH Trade (116 códigos), conferidos no site oficial |
+| `products-demo.ts` | Itens ilustrativos (fotos de referência, sem marca e sem código) |
+| `types.ts` | Formato de um produto: ID interno `EO-0000`, SKU por variante, coleção, ficha técnica, origem e status |
+| `validate.ts` | Checagem: códigos/fotos/IDs repetidos, marca não cadastrada, demo com código etc. Erro aqui impede o build |
+
+Regras: o código (`sku`) é copiado **exatamente** do fabricante e nunca preenchido por semelhança visual.
+Se não houver código confirmado, use `status: "pendente"` — o WhatsApp avisa que o código ainda não foi confirmado.
+A foto de um produto com várias cores indica qual cor aparece (`showsVariant`); se o cliente escolher outra, a ficha avisa.
+
+Relatório do catálogo: `npm run catalog:audit`.
+
+Para adicionar outro fabricante: cadastre a marca em `brands.ts`, crie `products-<marca>.ts` e inclua em `index.ts`.
 
 ### Instagram
 Sem configuração, a seção mostra imagens demonstrativas com o aviso “Prévia ilustrativa”.
@@ -110,7 +123,7 @@ src/
 
 - Logo oficial (arquivo).
 - Fotos próprias de ambientes e produtos.
-- Catálogo real (nomes, fotos, acabamentos; preços só se a loja quiser exibir).
+- Catálogos das demais marcas (Nordecor, Sindora, Deluxe, Moon, Select, Perfom) — arquivos ainda não enviados.
 - Perfil do Instagram e, se desejado, credenciais da API da Meta.
 - Endereço, horário e link do mapa.
 - Domínio (`NEXT_PUBLIC_SITE_URL`).
