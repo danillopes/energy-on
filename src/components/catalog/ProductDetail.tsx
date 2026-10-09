@@ -65,15 +65,15 @@ export function ProductDetail({ product, layout, variantId, onVariantChange, tit
   const Title = layout === "page" ? "h1" : "h2";
 
   return (
-    <div className="grid gap-8 md:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] md:gap-12">
+    <div className="grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-12">
       {/* Foto */}
       <div className="flex flex-col gap-3">
-        <div className="relative aspect-square overflow-hidden rounded-xl md:sticky md:top-6">
+        <div className="relative mx-auto aspect-square w-full max-w-[36rem] overflow-hidden rounded-xl lg:sticky lg:top-6">
           <ProductVisual
             image={shown}
             name={resolved.name}
             brand={brand?.name}
-            sizes="(min-width: 1024px) 560px, (min-width: 768px) 50vw, 100vw"
+            sizes="(min-width: 640px) 576px, 100vw"
             eager
           />
           {shown && (
@@ -151,12 +151,12 @@ export function ProductDetail({ product, layout, variantId, onVariantChange, tit
           </fieldset>
         )}
 
-        <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+        <div className="mt-7 flex flex-wrap gap-3 [&>*]:min-w-[12rem] [&>*]:flex-1">
           <a
             href={productInquiryLink(resolved)}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-solid flex-1"
+            className="btn btn-solid"
           >
             <WhatsAppIcon size={18} />
             Consultar especialista

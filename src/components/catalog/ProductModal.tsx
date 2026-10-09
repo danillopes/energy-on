@@ -37,7 +37,7 @@ export function ProductModal({
       onClick={(event) => event.target === dialog.current && onClose()}
       className="fixed inset-x-0 top-auto bottom-0 m-0 max-h-[94svh] w-full max-w-none overflow-hidden rounded-t-2xl border-t border-smoke bg-ink p-0 text-paper backdrop:bg-black/75 backdrop:backdrop-blur-sm open:animate-[rise_0.5s_var(--ease-out-soft)] md:inset-0 md:m-auto md:h-fit md:max-h-[min(90svh,58rem)] md:w-[min(100%-3rem,72rem)] md:rounded-2xl md:border"
     >
-      <div data-scroll className="max-h-[94svh] overflow-y-auto overscroll-contain md:max-h-[min(90svh,58rem)]">
+      <div data-scroll className="max-h-[94svh] overflow-x-hidden overflow-y-auto overscroll-contain md:max-h-[min(90svh,58rem)]">
         <div className="sticky top-0 z-10 flex justify-end bg-gradient-to-b from-ink via-ink/80 to-transparent px-3 pt-3 md:px-4 md:pt-4">
           <button
             type="button"

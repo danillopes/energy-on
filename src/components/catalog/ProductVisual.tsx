@@ -40,6 +40,8 @@ export function ProductVisual({ image, name, brand, sizes, eager, quality = 75, 
   }
 
   const contain = image.fit === "contain";
+  // Recortes em PNG (fundo transparente) ganham respiro; fotos JPG ocupam a largura toda.
+  const cutout = /\.png($|\?)/i.test(image.src);
   return (
     <span className={cn("absolute inset-0", contain ? "bg-[#efeeeb]" : "bg-graphite", className)}>
       <SmartImage
@@ -52,7 +54,7 @@ export function ProductVisual({ image, name, brand, sizes, eager, quality = 75, 
         fallbackLabel={name}
         className={cn(
           "transition-[transform,filter] duration-[900ms] ease-[var(--ease-out-soft)]",
-          contain ? "object-contain p-[8%] mix-blend-multiply" : "object-cover",
+          contain ? cn("object-contain mix-blend-multiply", cutout && "p-[7%]") : "object-cover",
           hoverZoom && "group-hover:scale-[1.04]",
         )}
       />
