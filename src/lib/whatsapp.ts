@@ -1,4 +1,5 @@
 import { site } from "@/config/site";
+import { brandName, type ResolvedProduct } from "@/data/catalog";
 
 /** Monta um link oficial wa.me com a mensagem corretamente codificada. */
 export function whatsappLink(message?: string): string {
@@ -12,30 +13,50 @@ export const WHATSAPP_GENERAL_MESSAGE =
 export const WHATSAPP_QUOTE_MESSAGE =
   "Olá! Vim pelo site da Energy On e gostaria de solicitar um orçamento.";
 
-type ProductRef = { name: string; slug: string; brand?: string; ref?: string };
+/** Link da página do produto, já com a variante escolhida. */
+export function productUrl(resolved: ResolvedProduct, absolute = true): string {
+  const { product, variant } = resolved;
+  const many = (product.variants?.length ?? 0) > 1;
+  const path = `/produtos/${product.slug}${variant && many ? `?variante=${encodeURIComponent(variant.id)}` : ""}`;
+  return absolute ? `${site.url}${path}` : path;
+}
 
 /**
- * Mensagem de orçamento de um produto, já pronta no WhatsApp do cliente.
- * Marca e código entram quando o produto tiver esses dados; o link leva o
- * atendente direto à página da peça (com foto), sem anexos.
+ * Mensagem do botão “Consultar especialista”, com os dados exatos do produto
+ * (e da variante escolhida). O código vai idêntico ao do fabricante; se ainda
+ * não houver código confirmado, a mensagem diz isso em vez de arriscar um.
  *
- * Exemplo:
- *   Olá! Gostaria de fazer um orçamento do produto:
+ *   Olá! Estava navegando pelo catálogo da Energy On e gostaria de saber mais sobre este produto:
  *
- *   *Pendente Cúpula*
- *   Marca: Nordecor
- *   Código: PD-1234
+ *   Produto: Pendente Cosmos 60
+ *   Marca: GMH Trade
+ *   Código: P-COSMOS-60-GOLD
+ *   Coleção: Cosmos
+ *   Cor: Gold
  *
- *   Vi no site: https://energy-on.vercel.app/produtos/pendente-cupula
+ *   Gostaria de consultar a disponibilidade e o valor deste modelo.
+ *
+ *   https://energy-on.vercel.app/produtos/gmh-pendente-cosmos?variante=60-gold
  */
-export function productQuoteMessage(product: ProductRef): string {
-  const lines = ["Olá! Gostaria de fazer um orçamento do produto:", "", `*${product.name}*`];
-  if (product.brand) lines.push(`Marca: ${product.brand}`);
-  if (product.ref) lines.push(`Código: ${product.ref}`);
-  lines.push("", `Vi no site: ${site.url}/produtos/${product.slug}`);
+export function productInquiryMessage(resolved: ResolvedProduct): string {
+  const { product } = resolved;
+  const brand = brandName(product);
+  const lines = [
+    "Olá! Estava navegando pelo catálogo da Energy On e gostaria de saber mais sobre este produto:",
+    "",
+    `Produto: ${resolved.name}`,
+  ];
+  if (brand) lines.push(`Marca: ${brand}`);
+  if (resolved.sku) lines.push(`Código: ${resolved.sku}`);
+  else if (product.status === "demonstrativo") lines.push(`Código: sem código de fabricante (foto ilustrativa do site, ref. ${product.id})`);
+  else lines.push(`Código: ainda não confirmado (ref. interna ${product.id})`);
+  if (product.collection) lines.push(`Coleção: ${product.collection}`);
+  if (resolved.color) lines.push(`Cor: ${resolved.color}`);
+  if (resolved.dimensions) lines.push(`Dimensões: ${resolved.dimensions}`);
+  lines.push("", "Gostaria de consultar a disponibilidade e o valor deste modelo.", "", productUrl(resolved));
   return lines.join("\n");
 }
 
-export function productQuoteLink(product: ProductRef): string {
-  return whatsappLink(productQuoteMessage(product));
+export function productInquiryLink(resolved: ResolvedProduct): string {
+  return whatsappLink(productInquiryMessage(resolved));
 }

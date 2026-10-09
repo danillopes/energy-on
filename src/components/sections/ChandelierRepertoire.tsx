@@ -4,7 +4,8 @@ import { useState, useCallback, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/cn";
-import { productQuoteLink } from "@/lib/whatsapp";
+import { getProduct, resolveProduct } from "@/data/catalog";
+import { productInquiryLink } from "@/lib/whatsapp";
 import { ArrowIcon, WhatsAppIcon } from "../shared/Icons";
 
 const references = [
@@ -76,11 +77,7 @@ const references = [
   },
 ];
 
-const chandelierProduct = {
-  slug: "lustre-aurea",
-  name: "Lustre Áurea Contemporâneo",
-  image: "/media/lustre-aurea-jantar.webp",
-};
+const chandelierProduct = resolveProduct(getProduct("lustre-aurea")!);
 
 export function ChandelierRepertoire() {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -221,7 +218,7 @@ export function ChandelierRepertoire() {
             {/* CTAs */}
             <div className="mt-8 flex flex-col gap-3 border-t border-smoke/70 pt-6">
               <a
-                href={productQuoteLink(chandelierProduct)}
+                href={productInquiryLink(chandelierProduct)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-solid w-full"
@@ -229,7 +226,7 @@ export function ChandelierRepertoire() {
                 <WhatsAppIcon size={18} />
                 Solicitar orçamento deste lustre
               </a>
-              <Link href={`/produtos/${chandelierProduct.slug}`} className="btn btn-ghost w-full">
+              <Link href={`/produtos/${chandelierProduct.product.slug}`} className="btn btn-ghost w-full">
                 Ver galeria completa no catálogo
               </Link>
             </div>

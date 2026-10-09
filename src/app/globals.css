@@ -204,6 +204,8 @@ img { -webkit-user-drag: none; }
     }
   }
 
+  .chip:disabled { opacity: 0.35; cursor: default; }
+
   .scroll-row {
     display: flex;
     gap: 0.5rem;
@@ -270,3 +272,6 @@ img { -webkit-user-drag: none; }
   .hero-letter, .hero-rise { opacity: 1; }
   .light-up > .light-up__media { transform: none; filter: none; }
 }
+
+/* Com uma janela (ficha do produto, filtros) aberta, a página de trás não rola. */
+html:has(dialog[open]) { overflow: hidden; }

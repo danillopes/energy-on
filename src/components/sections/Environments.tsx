@@ -302,7 +302,7 @@ function EnvironmentPanel({ env }: { env: Environment }) {
                   <a href={`/produtos/${product.slug}`} className="group block">
                     <span className="relative block aspect-square overflow-hidden rounded-sm bg-graphite">
                       <SmartImage
-                        src={product.image}
+                        src={product.image?.src ?? ""}
                         alt=""
                         fill
                         sizes="(min-width: 1024px) 10vw, 30vw"

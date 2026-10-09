@@ -27,22 +27,12 @@ export const styles = [
   { id: "minimalista", label: "Minimalista" },
   { id: "industrial", label: "Industrial" },
   { id: "contemporaneo", label: "Contemporâneo" },
-] as const;
-
-export const finishes = [
-  { id: "preto", label: "Preto" },
-  { id: "branco", label: "Branco" },
-  { id: "dourado", label: "Dourado" },
-  { id: "cromado", label: "Cromado" },
-  { id: "cobre", label: "Cobre" },
-  { id: "madeira", label: "Madeira" },
-  { id: "vidro", label: "Vidro" },
+  { id: "organico", label: "Orgânico" },
 ] as const;
 
 export type CategoryId = (typeof categories)[number]["id"];
 export type RoomId = (typeof rooms)[number]["id"];
 export type StyleId = (typeof styles)[number]["id"];
-export type FinishId = (typeof finishes)[number]["id"];
 
 type Labeled = { id: string; label: string };
 export const labelOf = <T extends Labeled>(list: readonly T[], id: string) =>
