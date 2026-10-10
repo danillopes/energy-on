@@ -5,7 +5,7 @@ import { site } from "@/config/site";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { cn } from "@/lib/cn";
 import { WHATSAPP_GENERAL_MESSAGE, WHATSAPP_QUOTE_MESSAGE, whatsappLink } from "@/lib/whatsapp";
-import { CloseIcon, PhoneIcon, WhatsAppIcon } from "../shared/Icons";
+import { CloseIcon, WhatsAppIcon } from "../shared/Icons";
 import { Logo } from "../shared/Logo";
 
 const sectionIds = site.nav.map((item) => item.id);
@@ -121,12 +121,6 @@ export function Header({ base = "", alwaysSolid = false }: { base?: string; alwa
               <WhatsAppIcon size={20} />
             </a>
             <a
-              href={site.contact.phoneHref}
-              className="link-line hidden text-small whitespace-nowrap text-paper/80 hover:text-paper xl:inline"
-            >
-              {site.contact.phoneDisplay}
-            </a>
-            <a
               href={whatsappLink(WHATSAPP_QUOTE_MESSAGE)}
               target="_blank"
               rel="noopener noreferrer"
@@ -213,9 +207,6 @@ export function Header({ base = "", alwaysSolid = false }: { base?: string; alwa
             className="btn btn-solid flex-1"
           >
             <WhatsAppIcon size={18} /> Solicitar orçamento
-          </a>
-          <a href={site.contact.phoneHref} className="btn btn-ghost flex-1">
-            <PhoneIcon size={18} /> {site.contact.phoneShort}
           </a>
         </div>
         <button type="button" className="sr-only" onClick={() => close()}>

@@ -2,12 +2,12 @@ import Link from "next/link";
 import { site } from "@/config/site";
 import { categories } from "@/data/taxonomy";
 import { WHATSAPP_GENERAL_MESSAGE, whatsappLink } from "@/lib/whatsapp";
-import { InstagramIcon, PhoneIcon, PinIcon, WhatsAppIcon } from "../shared/Icons";
+import { InstagramIcon, PinIcon, WhatsAppIcon } from "../shared/Icons";
 import { Logo } from "../shared/Logo";
 import { CategoryLink } from "./CategoryLink";
 
 export function Footer({ homeLinks = true }: { homeLinks?: boolean }) {
-  const { address, instagram, contact } = site;
+  const { address, instagram } = site;
   const hasAddress = Boolean(address.street);
   const year = new Date().getFullYear();
   const prefix = homeLinks ? "" : "/";
@@ -68,13 +68,7 @@ export function Footer({ homeLinks = true }: { homeLinks?: boolean }) {
                 className="inline-flex items-center gap-3 hover:text-paper"
               >
                 <WhatsAppIcon size={18} />
-                WhatsApp {contact.phoneShort}
-              </a>
-            </li>
-            <li>
-              <a href={contact.phoneHref} className="inline-flex items-center gap-3 hover:text-paper">
-                <PhoneIcon size={18} />
-                {contact.phoneDisplay}
+                WhatsApp
               </a>
             </li>
             <li>
