@@ -52,6 +52,7 @@ export function ProductVisual({ image, name, brand, sizes, eager, quality = 75, 
         quality={quality}
         loading={eager ? "eager" : "lazy"}
         fallbackLabel={name}
+        style={!contain && image.focus ? { objectPosition: image.focus } : undefined}
         className={cn(
           "transition-[transform,filter] duration-[900ms] ease-[var(--ease-out-soft)]",
           contain ? cn("object-contain mix-blend-multiply", cutout && "p-[7%]") : "object-cover",

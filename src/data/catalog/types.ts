@@ -17,6 +17,11 @@ export type ProductImage = {
   alt: string;
   /** contain = foto de produto (fundo neutro, sem corte); cover = foto de ambiente. */
   fit?: "contain" | "cover";
+  /**
+   * object-position do recorte (só para fit "cover"), para deixar a luminária
+   * centralizada e em destaque. Ex.: "center 30%", "30% center". Padrão: center.
+   */
+  focus?: string;
   /** De onde veio a foto (ex.: "GMH Trade (site oficial)", "Unsplash"). */
   credit?: string;
   /**

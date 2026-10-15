@@ -81,7 +81,7 @@ export const demoProducts: Product[] = [
     category: "pendentes",
     rooms: ["sala", "quarto"],
     style: "minimalista",
-    image: { src: unsplash("1779618127224-cfc3339620d3"), alt: "Pendentes esféricos brancos com detalhes em madeira", fit: "cover", credit: "Unsplash" },
+    image: { src: unsplash("1779618127224-cfc3339620d3"), alt: "Pendentes esféricos brancos com detalhes em madeira", fit: "cover", focus: "center 25%", credit: "Unsplash" },
     summary: "Luz difusa e uniforme, ideal ao lado da cama ou sobre mesas laterais.",
   }),
   demo({
@@ -201,7 +201,7 @@ export const demoProducts: Product[] = [
     category: "luminarias-de-piso",
     rooms: ["sala"],
     style: "minimalista",
-    image: { src: unsplash("1494438639946-1ebd1d20bf85"), alt: "Luminária de leitura preta com haste fina junto à parede", fit: "cover", credit: "Unsplash" },
+    image: { src: unsplash("1494438639946-1ebd1d20bf85"), alt: "Luminária de leitura preta com haste fina junto à parede", fit: "cover", focus: "right 35%", credit: "Unsplash" },
     summary: "Ilumina cantos de leitura sem obra nem instalação.",
   }),
   demo({
@@ -221,7 +221,7 @@ export const demoProducts: Product[] = [
     category: "iluminacao-externa",
     rooms: ["externa"],
     style: "classico",
-    image: { src: unsplash("1640365554715-cfbb20efcf91"), alt: "Lanterna esférica acesa em um jardim ao entardecer", fit: "cover", credit: "Unsplash" },
+    image: { src: unsplash("1640365554715-cfbb20efcf91"), alt: "Lanterna esférica acesa em um jardim ao entardecer", fit: "cover", focus: "left center", credit: "Unsplash" },
     summary: "Luz decorativa para jardins, pergolados e varandas.",
   }),
   demo({

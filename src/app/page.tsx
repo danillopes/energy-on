@@ -2,7 +2,6 @@ import { site } from "@/config/site";
 import { getProducts } from "@/data/products";
 import { About } from "@/components/sections/About";
 import { BeforeAfter } from "@/components/sections/BeforeAfter";
-import { ChandelierRepertoire } from "@/components/sections/ChandelierRepertoire";
 import { Catalog } from "@/components/sections/Catalog";
 import { Environments } from "@/components/sections/Environments";
 import { Footer } from "@/components/sections/Footer";
@@ -43,7 +42,6 @@ export default function Home() {
         <Environments />
         <Simulator />
         <BeforeAfter />
-        <ChandelierRepertoire />
         <Catalog products={getProducts()} />
         <Instagram />
         <About />
