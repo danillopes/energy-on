@@ -15,10 +15,10 @@ type CompareSliderProps = {
 
 /**
  * Comparador antes/depois.
- * - Mouse, toque e caneta via Pointer Events (com captura do ponteiro).
+ * - O arraste contínuo começa só na alça central (ela captura o ponteiro).
+ *   Tocar na imagem apenas leva a barra até ali, sem capturar o gesto — assim
+ *   a rolagem vertical da página pelo celular nunca é travada ao encostar na foto.
  * - Teclado: setas (2%), Page Up/Down (10%), Home/End.
- * - `touch-action: pan-y`: no celular, arrastar na horizontal move a barra
- *   e arrastar na vertical continua rolando a página.
  * - A posição é escrita direto numa variável CSS (sem re-renderizar a cada movimento).
  */
 export function CompareSlider({
@@ -31,6 +31,7 @@ export function CompareSlider({
   className,
 }: CompareSliderProps) {
   const root = useRef<HTMLDivElement>(null);
+  const handle = useRef<HTMLDivElement>(null);
   const position = useRef(initial);
   const frame = useRef(0);
   const dragging = useRef(false);
@@ -49,21 +50,31 @@ export function CompareSlider({
 
   useEffect(() => () => cancelAnimationFrame(frame.current), []);
 
-  const fromPointer = (event: PointerEvent<HTMLDivElement>) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    apply(((event.clientX - rect.left) / rect.width) * 100);
+  const fromClientX = (clientX: number) => {
+    const rect = root.current?.getBoundingClientRect();
+    if (!rect) return;
+    apply(((clientX - rect.left) / rect.width) * 100);
   };
 
-  const onPointerDown = (event: PointerEvent<HTMLDivElement>) => {
+  // Tocar/clicar na imagem só reposiciona a barra uma vez (sem capturar o
+  // ponteiro), para não interferir na rolagem vertical da página.
+  const onTrackPointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.button !== 0) return;
+    if (handle.current?.contains(event.target as Node)) return;
+    fromClientX(event.clientX);
+  };
+
+  // O arraste contínuo acontece na alça, que captura o ponteiro.
+  const onHandlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
     if (event.button !== 0) return;
     dragging.current = true;
     event.currentTarget.setPointerCapture(event.pointerId);
-    fromPointer(event);
+    event.preventDefault();
   };
-  const onPointerMove = (event: PointerEvent<HTMLDivElement>) => {
-    if (dragging.current) fromPointer(event);
+  const onHandlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    if (dragging.current) fromClientX(event.clientX);
   };
-  const onPointerEnd = (event: PointerEvent<HTMLDivElement>) => {
+  const onHandlePointerEnd = (event: PointerEvent<HTMLDivElement>) => {
     dragging.current = false;
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId);
@@ -84,10 +95,7 @@ export function CompareSlider({
       ref={root}
       className={cn("relative select-none overflow-hidden rounded-sm bg-graphite", className)}
       style={{ ["--pos" as string]: `${initial}%`, touchAction: "pan-y" }}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerEnd}
-      onPointerCancel={onPointerEnd}
+      onPointerDown={onTrackPointerDown}
     >
       <div className="absolute inset-0" aria-hidden="true">{before}</div>
       <div
@@ -105,8 +113,9 @@ export function CompareSlider({
         {afterLabel}
       </span>
 
-      {/* Barra + alça */}
+      {/* Barra + alça (captura o ponteiro para o arraste) */}
       <div
+        ref={handle}
         role="slider"
         tabIndex={0}
         aria-label={label}
@@ -115,7 +124,11 @@ export function CompareSlider({
         aria-valuenow={value}
         aria-valuetext={`${value}% mostrando “${beforeLabel}”`}
         onKeyDown={onKeyDown}
-        className="group absolute inset-y-0 z-10 -ml-6 w-12 cursor-ew-resize focus-visible:outline-none"
+        onPointerDown={onHandlePointerDown}
+        onPointerMove={onHandlePointerMove}
+        onPointerUp={onHandlePointerEnd}
+        onPointerCancel={onHandlePointerEnd}
+        className="group absolute inset-y-0 z-10 -ml-6 w-12 cursor-ew-resize touch-none focus-visible:outline-none"
         style={{ left: "var(--pos)" }}
       >
         <span className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-paper shadow-[0_0_12px_rgb(255_255_255/0.5)]" />

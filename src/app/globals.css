@@ -39,11 +39,18 @@
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-left: env(safe-area-inset-left, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
+  /* Distância do topo onde a barra fixa do catálogo encosta. No celular, quando
+     o cabeçalho some ao rolar (data-header-hidden), ela sobe para o topo. */
+  --header-offset: calc(var(--header-h) + var(--safe-top));
   color-scheme: dark;
 }
 
 @media (min-width: 64rem) {
   :root { --header-h: 4.25rem; }
+}
+
+@media (max-width: 63.999rem) {
+  :root[data-header-hidden="true"] { --header-offset: var(--safe-top); }
 }
 
 html {
@@ -273,5 +280,14 @@ img { -webkit-user-drag: none; }
   .light-up > .light-up__media { transform: none; filter: none; }
 }
 
-/* Com uma janela (ficha do produto, filtros) aberta, a página de trás não rola. */
+/* Com uma janela (ficha do produto, filtros) aberta, a página de trás não rola.
+   Reforço para iOS Safari e webviews (Instagram/WhatsApp): trava a rolagem do
+   fundo e impede que o toque “vaze” para a página atrás do modal. */
 html:has(dialog[open]) { overflow: hidden; }
+html:has(dialog[open]) body { overflow: hidden; touch-action: none; }
+dialog[open] { overscroll-behavior: contain; }
+dialog[open] [data-scroll] {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}

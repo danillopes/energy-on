@@ -13,6 +13,7 @@ const sectionIds = site.nav.map((item) => item.id);
 export function Header({ base = "", alwaysSolid = false }: { base?: string; alwaysSolid?: boolean }) {
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const active = useActiveSection(sectionIds);
   const sentinel = useRef<HTMLDivElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
@@ -32,6 +33,44 @@ export function Header({ base = "", alwaysSolid = false }: { base?: string; alwa
     setOpen(false);
     if (restoreFocus) menuButton.current?.focus();
   }, []);
+
+  // Celular: o cabeçalho recolhe ao rolar para baixo e reaparece ao rolar para
+  // cima, liberando espaço vertical (sobretudo em cima do catálogo). No desktop
+  // ele nunca some. O menu aberto força o cabeçalho visível.
+  useEffect(() => {
+    if (open) return; // menu aberto: cabeçalho fica visível (ver render)
+    let lastY = window.scrollY;
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const y = window.scrollY;
+      const delta = y - lastY;
+      if (window.innerWidth >= 1024 || y < 120) setHidden(false);
+      else if (delta > 6) setHidden(true);
+      else if (delta < -6) setHidden(false);
+      lastY = y;
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [open]);
+
+  // Com o menu aberto o cabeçalho é sempre mostrado.
+  const collapsed = hidden && !open;
+
+  // Compartilha o estado com o CSS para a barra do catálogo subir junto.
+  useEffect(() => {
+    const root = document.documentElement;
+    root.dataset.headerHidden = collapsed ? "true" : "false";
+    return () => {
+      root.dataset.headerHidden = "false";
+    };
+  }, [collapsed]);
 
   // Menu mobile: trava a rolagem do fundo, fecha com Esc e mantém o foco dentro.
   useEffect(() => {
@@ -74,7 +113,8 @@ export function Header({ base = "", alwaysSolid = false }: { base?: string; alwa
 
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-50 pt-[var(--safe-top)] transition-[background-color,border-color,backdrop-filter] duration-700 ease-[var(--ease-out-soft)]",
+          "fixed inset-x-0 top-0 z-50 pt-[var(--safe-top)] transition-[background-color,border-color,backdrop-filter,translate] duration-500 ease-[var(--ease-out-soft)] will-change-transform",
+          collapsed && "max-lg:-translate-y-full",
           alwaysSolid || solid || open
             ? "border-b border-white/10 bg-ink/80 backdrop-blur-xl backdrop-saturate-150"
             : "border-b border-transparent bg-transparent",
@@ -170,8 +210,8 @@ export function Header({ base = "", alwaysSolid = false }: { base?: string; alwa
           open ? "visible opacity-100" : "invisible opacity-0",
         )}
       >
-        <nav aria-label="Menu mobile" className="container-x flex flex-1 flex-col justify-center overflow-y-auto py-6">
-          <ul className="flex flex-col">
+        <nav aria-label="Menu mobile" className="container-x flex flex-1 flex-col justify-start overflow-y-auto py-8">
+          <ul className="my-auto flex w-full flex-col">
             {site.nav.map((item, index) => (
               <li
                 key={item.id}

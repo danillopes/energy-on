@@ -37,8 +37,8 @@ export function Hero() {
         className="absolute inset-0 bg-[radial-gradient(120%_80%_at_0%_100%,rgb(0_0_0/0.7),transparent_60%)]"
       />
 
-      <div className="container-x relative mt-auto pt-[calc(var(--header-h)+var(--safe-top)+3rem)] pb-6 lg:pb-10">
-        <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
+      <div className="container-x relative mt-auto pt-[calc(var(--header-h)+var(--safe-top)+1.25rem)] pb-6 sm:pt-[calc(var(--header-h)+var(--safe-top)+3rem)] lg:pb-10">
+        <div className="grid gap-6 sm:gap-8 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7 xl:col-span-6">
             <p
               className="hero-rise type-h2 max-w-[16ch] text-paper"
@@ -47,14 +47,14 @@ export function Hero() {
               A iluminação transforma espaços. Nós transformamos ambientes.
             </p>
             <p
-              className="hero-rise type-lead mt-6 max-w-[46ch]"
+              className="hero-rise type-lead mt-4 max-w-[46ch] sm:mt-6"
               style={{ ["--d" as string]: "1.05s" }}
             >
               Descubra soluções em iluminação que valorizam cada detalhe e transformam a maneira como você vive
               seus espaços.
             </p>
             <div
-              className="hero-rise mt-8 flex flex-col gap-3 sm:flex-row"
+              className="hero-rise mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row"
               style={{ ["--d" as string]: "1.3s" }}
             >
               <a href="#produtos" className="btn btn-solid">
@@ -87,7 +87,7 @@ export function Hero() {
         <h1
           id="hero-title"
           aria-label="Energy On"
-          className="type-display relative mt-10 w-full whitespace-nowrap text-paper select-none lg:mt-14"
+          className="type-display relative mt-7 w-full whitespace-nowrap text-paper select-none sm:mt-10 lg:mt-14"
           // Ocupa exatamente a largura útil: (largura do container − margens) ÷ proporção do desenho.
           style={{ fontSize: "calc((min(100vw, 105rem) - 2 * var(--gutter)) / 5.75)", fontWeight: 450, fontStretch: "112%" }}
         >

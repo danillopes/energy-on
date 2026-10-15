@@ -309,7 +309,7 @@ export function Catalog({ products }: { products: Product[] }) {
         )}
 
         {/* Busca + tipo de produto */}
-        <div className="sticky top-[calc(var(--header-h)+var(--safe-top))] z-20 -mx-[var(--gutter)] mt-8 border-b border-smoke bg-ink/90 px-[var(--gutter)] py-3 backdrop-blur-xl">
+        <div className="sticky top-[var(--header-offset)] z-20 -mx-[var(--gutter)] mt-8 border-b border-smoke bg-ink/90 px-[var(--gutter)] py-3 backdrop-blur-xl transition-[top] duration-500 ease-[var(--ease-out-soft)]">
           <div className="flex items-center gap-3">
             <SearchBox value={filters.q} onChange={(q) => update({ q })} />
             <button
@@ -560,7 +560,7 @@ function FilterSheet({
           <button
             type="button"
             onClick={onClose}
-            className="grid h-11 w-11 place-items-center rounded-full hover:bg-white/10"
+            className="-mr-1 grid h-12 w-12 place-items-center rounded-full hover:bg-white/10"
             aria-label="Fechar filtros"
           >
             <CloseIcon />

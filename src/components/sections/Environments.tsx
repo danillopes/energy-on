@@ -127,6 +127,38 @@ function EnvironmentCarousel({ active, onChange }: { active: RoomId; onChange: (
   const reduced = useReducedMotion();
   const activeIndex = Math.max(0, roomIds.indexOf(active));
   const firstSync = useRef(true);
+  // Verdadeiro enquanto o dedo arrasta o carrossel (ou a inércia continua), para
+  // o scroll programático não brigar com o gesto do usuário.
+  const interacting = useRef(false);
+
+  // Marca o período de interação por toque: começa no toque e termina pouco
+  // depois de a rolagem parar.
+  useEffect(() => {
+    const root = scroller.current;
+    if (!root) return;
+    let timer: ReturnType<typeof setTimeout>;
+    const start = () => {
+      interacting.current = true;
+      clearTimeout(timer);
+    };
+    const onScroll = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        interacting.current = false;
+      }, 140);
+    };
+    root.addEventListener("pointerdown", start, { passive: true });
+    root.addEventListener("touchstart", start, { passive: true });
+    root.addEventListener("wheel", start, { passive: true });
+    root.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      root.removeEventListener("pointerdown", start);
+      root.removeEventListener("touchstart", start);
+      root.removeEventListener("wheel", start);
+      root.removeEventListener("scroll", onScroll);
+      clearTimeout(timer);
+    };
+  }, []);
 
   // Slide que está centralizado na tela vira o ambiente ativo.
   useEffect(() => {
@@ -147,11 +179,14 @@ function EnvironmentCarousel({ active, onChange }: { active: RoomId; onChange: (
     return () => observer.disconnect();
   }, [onChange]);
 
-  // Quando o ativo muda por fora (abertura da página, botões), leva o carrossel até ele.
+  // Quando o ativo muda por fora (abertura da página, setas, bolinhas), leva o
+  // carrossel até ele. Durante o arraste do dedo não fazemos nada: o próprio
+  // snap nativo já posiciona o slide, e um scrollTo aqui brigaria com o gesto.
   useEffect(() => {
     const root = scroller.current;
     const slide = slides.current[activeIndex];
     if (!root || !slide) return;
+    if (interacting.current && !firstSync.current) return;
     const target = slide.offsetLeft - root.offsetLeft;
     if (Math.abs(root.scrollLeft - target) < 4) return;
     root.scrollTo({ left: target, behavior: firstSync.current || reduced ? "auto" : "smooth" });
@@ -281,7 +316,7 @@ function EnvironmentPanel({ env }: { env: Environment }) {
         />
       </LightUp>
 
-      <div className="flex flex-col lg:col-span-5 lg:py-4">
+      <div className="flex min-w-0 flex-col lg:col-span-5 lg:py-4">
         <h3 className="type-h2 text-[clamp(1.75rem,1.2rem+1.6vw,2.5rem)]">{env.name}</h3>
         <p className="type-lead mt-5">{env.lead}</p>
 
@@ -296,16 +331,18 @@ function EnvironmentPanel({ env }: { env: Environment }) {
         {suggestions.length > 0 && (
           <div className="mt-10">
             <p className="text-small text-mist">Peças que combinam</p>
-            <ul className="mt-4 grid grid-cols-3 gap-3">
+            {/* Celular: rolagem horizontal, para os nomes não quebrarem em muitas
+                linhas numa grade apertada. Desktop: grade de 3 colunas. */}
+            <ul className="mt-4 flex gap-3 overflow-x-auto overscroll-x-contain pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:grid-cols-3 lg:overflow-visible">
               {suggestions.map((product) => (
-                <li key={product.slug}>
+                <li key={product.slug} className="w-36 shrink-0 lg:w-auto">
                   <a href={`/produtos/${product.slug}`} className="group block">
                     <span className="relative block aspect-square overflow-hidden rounded-sm bg-graphite">
                       <SmartImage
                         src={product.image?.src ?? ""}
                         alt=""
                         fill
-                        sizes="(min-width: 1024px) 10vw, 30vw"
+                        sizes="(min-width: 1024px) 10vw, 144px"
                         quality={60}
                         fallbackLabel={product.name}
                         className="object-cover object-center transition-transform duration-700 ease-[var(--ease-out-soft)] group-hover:scale-105"

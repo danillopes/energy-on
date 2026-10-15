@@ -42,7 +42,7 @@ export function ProductModal({
           <button
             type="button"
             onClick={onClose}
-            className="grid h-11 w-11 place-items-center rounded-full bg-graphite text-paper transition-colors hover:bg-smoke"
+            className="grid h-12 w-12 place-items-center rounded-full bg-graphite text-paper transition-colors hover:bg-smoke"
             aria-label="Fechar"
           >
             <CloseIcon />
